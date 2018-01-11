@@ -1,25 +1,28 @@
 import { createSelector } from 'reselect';
 
-/**
- * Direct selector to the titlesPage state domain
- */
-const selectTitlesPageDomain = (state) => state.get('titlesPage');
+const selectTitlesPageDomain = (state) => {
+  console.log(state);
+  state.get('titlesPage');
+};
 
-/**
- * Other specific selectors
- */
-
-
-/**
- * Default selector used by TitlesPage
- */
-
-const makeSelectTitlesPage = () => createSelector(
+const makeSelectLoading = () => createSelector(
   selectTitlesPageDomain,
-  (substate) => substate.toJS()
+  (domainState) => domainState.get('loading')
 );
 
-export default makeSelectTitlesPage;
+const makeSelectError = () => createSelector(
+  selectTitlesPageDomain,
+  (domainState) => domainState.get('error')
+);
+
+const makeSelectTitles = () => createSelector(
+  selectTitlesPageDomain,
+  (domainState) => domainState.get('titles')
+);
+
 export {
   selectTitlesPageDomain,
+  makeSelectLoading,
+  makeSelectError,
+  makeSelectTitles,
 };

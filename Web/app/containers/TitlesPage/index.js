@@ -12,89 +12,48 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectTitlesPage from './selectors';
+import { makeSelectTitles, makeSelectLoading, makeSelectError } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css'
 
-export class TitlesPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class TitlesPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const data = [{
-      titleId: 70523,
-      titleName: 'Cavalcade',
-      genres: [
-        'Adaptation',
-        'Based-on',
-        'Drama'
-      ],
-      releaseYear: 1933
-    },{
-      titleId: 67044,
-      titleName: 'All About Eve',
-      genres: [
-        "Adaptation",
-        "Based-on",
-        "Drama"
-      ],
-      releaseYear: 1950
-    },{
-      titleId: 12708,
-      titleName: 'A Man for All Seasons',
-      genres: [
-        "Adaptation",
-        "Based-on",
-        "Drama",
-        "Historical"
-      ],
-      releaseYear: 1966
-    }];
-   
-    const columns = [{
-      Header: 'TitleId',
-      accessor: 'titleId',
-      Cell: props => <span className='number'>{props.value}</span>
-    }, {
-      Header: 'TitleName',
-      accessor: 'titleName',      
-    }, {
-      id: 'genres',
-      Header: 'Genres',
-      accessor: d => d.genres.join()
-    }, {
-      Header: 'Release Year',
-      accessor: 'releaseYear',
-      Cell: props => <span className='number'>{props.value}</span>
-    }]
+    const { loading, error, titles } = this.props;
+    const titlesListProps = {
+      loading,
+      error,
+      repos,
+    };   
 
     return (
       <div>
         <h1>Titles</h1>
-        <ReactTable
-          data={data}
-          columns={columns}
-        />
+        <TitlesList {...titlesListProps} />
       </div>
     );
   }
 }
 
 TitlesPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+  error: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
+  titles: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
 };
 
 const mapStateToProps = createStructuredSelector({
-  titlespage: makeSelectTitlesPage(),
+  titles: makeSelectTitles(),
+  loading: makeSelectLoading(),
+  error: makeSelectError(),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'titlesPage', reducer });
 const withSaga = injectSaga({ key: 'titlesPage', saga });
@@ -102,5 +61,5 @@ const withSaga = injectSaga({ key: 'titlesPage', saga });
 export default compose(
   withReducer,
   withSaga,
-  withConnect,
+  mapStateToProps,
 )(TitlesPage);
