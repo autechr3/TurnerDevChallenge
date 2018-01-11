@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using System.Collections.Generic;
+    using API.Model;
+    using Microsoft.AspNetCore.Mvc;
+    using MongoDB.Bson;
+    using MongoDB.Driver;
+
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            var client = new MongoClient("mongodb://readonly:turner@ds043348.mongolab.com:43348/dev-challenge");
+            var db = client.GetDatabase("dev-challenge");
+            var collection = db.GetCollection<BsonDocument>("Titles");
+            var a = collection.Find(new BsonDocument()).ToList();
+            return a.ToJson();
         }
 
         // GET api/values/5
