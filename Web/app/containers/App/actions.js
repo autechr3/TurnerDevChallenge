@@ -19,6 +19,9 @@ import {
   LOAD_REPOS,
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS_ERROR,
+  LOAD_TITLES,
+  LOAD_TITLES_SUCCESS,
+  LOAD_TITLES_ERROR,
 } from './constants';
 
 /**
@@ -60,4 +63,25 @@ export function repoLoadingError(error) {
     type: LOAD_REPOS_ERROR,
     error,
   };
+}
+
+export function loadTitles() {
+  console.log('loadTitles()');
+  return {
+    type: LOAD_TITLES,
+  }
+}
+
+export function titlesLoaded(titles) {
+  return {
+    type: LOAD_TITLES_SUCCESS,
+    titles,
+  }
+}
+
+export function titlesLoadingError(error) {
+  return {
+    type: LOAD_TITLES_SUCCESS,
+    error,
+  }
 }

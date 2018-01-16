@@ -16,6 +16,9 @@ import {
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS,
   LOAD_REPOS_ERROR,
+  LOAD_TITLES,
+  LOAD_TITLES_SUCCESS,
+  LOAD_TITLES_ERROR,
 } from './constants';
 
 // The initial state of the App
@@ -26,6 +29,7 @@ const initialState = fromJS({
   userData: {
     repositories: false,
   },
+  titles: false,
 });
 
 function appReducer(state = initialState, action) {
@@ -44,6 +48,20 @@ function appReducer(state = initialState, action) {
       return state
         .set('error', action.error)
         .set('loading', false);
+    case LOAD_TITLES:
+      return state
+        .set('loading', true)
+        .set('error', false)
+        .set('titles', false);
+    case LOAD_TITLES_SUCCESS:
+      return state
+        .set('loading', false)
+        .set('error', false)
+        .set('titles', action.titles);
+    case LOAD_TITLES_ERROR:
+      return state
+        .set('loading', false)
+        .set('error', true)
     default:
       return state;
   }

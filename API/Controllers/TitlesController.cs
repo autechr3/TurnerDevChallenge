@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
 
     using API.Model;
-
     using Microsoft.AspNetCore.Mvc;
 
     [Produces("application/json")]
